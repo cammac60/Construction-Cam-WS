@@ -6,12 +6,14 @@ import pandas as pd
 import re
 import os
 
-base_url = "https://forum.skyscraperpage.com/showthread.php?t=227316&page=1"
+base_url = "https://forum.skyscraperpage.com/showthread.php?t=227316&page="
 
 driver = webdriver.Firefox()
-driver.get(base_url)
-driver.implicitly_wait(100)
+driver.get(base_url + "1")
+driver.implicitly_wait(10)
 
-num_links = len(driver.find_elements_by_class_name('pagenavi'))
+link_wrapper = driver.find_elements_by_class_name('pagenavi')[0]
+num_buttons = link_wrapper.find_elements_by_xpath(".//div")[1]
+max_page_num = num_buttons.find_elements_by_xpath(".//a")[7].get_attribute('innerText')
 
-print(num_links)
+driver.close()
