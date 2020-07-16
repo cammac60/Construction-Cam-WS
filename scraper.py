@@ -28,7 +28,7 @@ def collect_comments():
     return comments
 
 def match_text(text):
-    search_terms = ["Camera", "camera", "Cameras", "cameras", "construction camera", "construction cameras", "Construction camera", "Construction cameras", "construction cam", "Construction cam", "construction cams", "Construction cams", "Construction Cam", "Construction Cams", "Zeppelin"]
+    search_terms = ["Camera", "camera", "Cameras", "cameras", "construction camera", "construction cameras", "Construction camera", "Construction cameras", "construction cam", "Construction cam", "construction cams", "Construction cams", "Construction Cam", "Construction Cams"]
     return any(x in text for x in search_terms)
 
 def filter_comments(comment_array):
