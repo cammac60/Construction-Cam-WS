@@ -16,4 +16,7 @@ link_wrapper = driver.find_elements_by_class_name('pagenavi')[0]
 num_buttons = link_wrapper.find_elements_by_xpath(".//div")[1]
 max_page_num = num_buttons.find_elements_by_xpath(".//a")[7].get_attribute('innerText')
 
+for i in range(0, int(max_page_num) + 1):
+    pass
+
 driver.close()
