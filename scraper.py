@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 import pandas as pd
+from tqdm import tqdm
 import re
 import os
 
@@ -21,9 +22,6 @@ driver.implicitly_wait(10)
 link_wrapper = driver.find_elements_by_class_name('pagenavi')[0]
 num_buttons = link_wrapper.find_elements_by_xpath(".//div")[1]
 max_page_num = num_buttons.find_elements_by_xpath(".//a")[7].get_attribute('innerText')
-max_expected_wait = int((int(max_page_num) * 5) / 60)
-
-print("Maximum wait time: " + str(max_expected_wait) + " minutes")
 
 results = []
 
@@ -40,7 +38,7 @@ def collect_comments():
     return comments
 
 def match_text(text):
-    search_terms = ["Camera", "camera", "Cameras", "cameras", "construction camera", "construction cameras", "Construction camera", "Construction cameras", "construction cam", "Construction cam", "construction cams", "Construction cams", "Construction Cam", "Construction Cams", "Zeppelin"]
+    search_terms = ["Camera", "camera", "Cameras", "cameras", "construction camera", "construction cameras", "Construction camera", "Construction cameras", "construction cam", "Construction cam", "construction cams", "Construction cams", "Construction Cam", "Construction Cams"]
     return any(x in text for x in search_terms)
 
 def find_urls(text):
@@ -54,7 +52,7 @@ def filter_comments(comment_array, index):
             if len(urls) >= 1:
                 return urls
 
-for i in range(0, int(max_page_num) + 1):
+for i in tqdm(range(0, int(max_page_num) + 1)):
     driver.implicitly_wait(5)
     comments = collect_comments()
     url_list = filter_comments(comments, i)
