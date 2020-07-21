@@ -27,12 +27,16 @@ print("Maximum wait time: " + str(max_expected_wait) + " minutes")
 
 results = []
 
+def grab_href(link_list):
+    links = []
+    for i in range(len(link_list)):
+        links.append(link_list[i].get_attribute('href'))
+    return links
+
 def collect_comments():
     comments = driver.find_elements_by_css_selector("div[id*='post_message']")
     for i in range(len(comments)):
-        # As noted on line 38, we need to get href which requires this to be changed to innerhtml
-        # comments[i] = comments[i].get_attribute('innerText')
-        comments[i] = {"html": comments[i].get_attribute('innerHTML'), "text": comments[i].get_attribute('innerText')}
+        comments[i] = {"links": grab_href(comments[i].find_elements_by_xpath(".//a")), "text": comments[i].get_attribute('innerText')}
     return comments
 
 def match_text(text):
@@ -46,14 +50,11 @@ def filter_comments(comment_array, index):
     for i in range(len(comment_array)):
         cur_text = comment_array[i]["text"]
         if match_text(cur_text) and find_urls(cur_text):
-            urls = comment_array[i]["html"].find_elements_by_xpath(".//a").get_attribute('href')
-            # Now passing in index to allow us to collect the page number where the url was found. This will allow for easy collection of full urls even if the collected url is corrupted.
-            # Many of the urls are collapsed, we need to find the href of the comments to get the full link.
-            # urls = re.findall(r'(https?://[^\s]+)', comment_array[i])
+            urls = comment_array[i]["links"]
             if len(urls) >= 1:
                 return urls
 
-for i in range(0, 1):
+for i in range(0, int(max_page_num) + 1):
     driver.implicitly_wait(5)
     comments = collect_comments()
     url_list = filter_comments(comments, i)
