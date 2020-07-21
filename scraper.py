@@ -9,9 +9,8 @@ import os
 
 # // TODO //
 
-# Refactor to allow the collection on the innerhtml of the comments.
-# Refactor so that final result is the full url from the href
-# See lines 33, 44, and 45
+# Create .csv file with the urls and page number rather than printing it.
+
 
 base_url = "https://forum.skyscraperpage.com/showthread.php?t=227316&page="
 
