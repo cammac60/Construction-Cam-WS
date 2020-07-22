@@ -6,6 +6,8 @@ import pandas as pd
 from tqdm import tqdm
 import re
 import os
+import json
+import datetime
 
 # // TODO //
 
@@ -23,6 +25,12 @@ num_buttons = link_wrapper.find_elements_by_xpath(".//div")[1]
 max_page_num = num_buttons.find_elements_by_xpath(".//a")[7].get_attribute('innerText')
 
 results = []
+
+def write_file(result_list):
+    current_time = str(datetime.datetime.now())
+    output_file_name =  "./results/" + current_time.replace(" ", "") + ".json"
+    with open(output_file_name, 'w') as out_file:
+        json.dump(result_list, out_file, indent=4)
 
 def grab_href(link_list):
     links = []
@@ -44,14 +52,16 @@ def find_urls(text):
     return re.findall(r'(https?://[^\s]+)', text)
 
 def filter_comments(comment_array, index):
+    list = []
     for i in range(len(comment_array)):
         cur_text = comment_array[i]["text"]
         if match_text(cur_text) and find_urls(cur_text):
             urls = comment_array[i]["links"]
-            if len(urls) >= 1:
-                return urls
+            list.append({"links": urls, "page": index})
+            if len(list) > 0:
+                return list
 
-for i in tqdm(range(0, int(max_page_num) + 1)):
+for i in tqdm(range(0, int(max_page_num)+ 1)):
     driver.implicitly_wait(5)
     comments = collect_comments()
     url_list = filter_comments(comments, i)
@@ -59,6 +69,6 @@ for i in tqdm(range(0, int(max_page_num) + 1)):
         results = results + url_list
     driver.get(base_url + str(i + 1))
 
-print(results)
+write_file(results)
 
 driver.close()
