@@ -28,7 +28,7 @@ results = []
 
 def write_file(result_list):
     current_time = str(datetime.datetime.now())
-    output_file_name =  "./results/" + current_time.replace(" ", "") + ".json"
+    output_file_name =  "./results/" + current_time.replace(" ", "-") + ".json"
     with open(output_file_name, 'w') as out_file:
         json.dump(result_list, out_file, indent=4)
 
