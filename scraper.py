@@ -9,10 +9,6 @@ import os
 import json
 import datetime
 
-# // TODO //
-
-# Create .csv file with the urls and page number rather than printing it.
-
 
 base_url = "https://forum.skyscraperpage.com/showthread.php?t=227316&page="
 
